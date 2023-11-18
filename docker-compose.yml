@@ -1,0 +1,62 @@
+version: '3'
+
+x-app: &app
+  build:
+    context: .
+    dockerfile: ./docker/dev/app/Dockerfile
+  volumes:
+    - .:/app
+    - bundle:/usr/local/bundle
+  depends_on:
+    - db
+  image: rails
+  stdin_open: true
+  tty: true
+
+services:
+  runner:
+    <<: *app
+    container_name: example-runner
+    command: /bin/bash
+    profiles:
+      - extra
+  app:
+    <<: *app
+    container_name: example-app
+    command: /bin/sh -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    ports:
+      - 3000:3000
+  db:
+    build:
+      context: .
+      dockerfile: ./docker/dev/db/Dockerfile
+    image: mysql:8.2.0
+    container_name: example-db
+    platform: linux/amd64
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - db-data:/var/lib/mysql
+      - ./docker/dev/db/initdb.d:/docker-entrypoint-initdb.d
+      - ./docker/dev/db/conf.d:/etc/mysql/conf.d
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: minio_sample_development
+      TZ: "Asia/Tokyo"
+    ports:
+      - "3306:3306"
+  minio:
+    image: quay.io/minio/minio:RELEASE.2023-11-15T20-43-25Z
+    container_name: example-minio
+    environment:
+      MINIO_ROOT_USER: root
+      MINIO_ROOT_PASSWORD: password
+    command: server --console-address ":9001" /data
+    ports:
+      - 9000:9000
+      - 9001:9001
+
+
+volumes:
+  db-data:
+  bundle:
+
