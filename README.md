@@ -6,8 +6,6 @@ minioのサンプル
 
 ```shell
 docker compose build
-docker compose exec app bash
+bin/init.sh
+docker compose up 
 ```
-
-
-
