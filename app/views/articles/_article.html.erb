@@ -1,0 +1,20 @@
+<div id="<%= dom_id article %>">
+  <p>
+    <strong>Title:</strong>
+    <%= article.title %>
+  </p>
+
+  <p>
+    <strong>Body:</strong>
+    <%= article.body %>
+  </p>
+  <% if article.image.attached? %>
+    <p>
+      <strong>Image:</strong>
+      <%#= image_tag article.image, alt: "Article image", style: "width: 200px" %>
+      <%# raise %>
+      <%= image_tag url_for(article.image) %>
+      <%#= image_tag url_for(article.image), alt: "Article image", style: "width: 200px" %>
+    </p>
+  <% end %>
+</div>
