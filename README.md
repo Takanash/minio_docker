@@ -1,6 +1,6 @@
 # 概要
 
-minioのサンプル
+ローカル環境で動作するminioのサンプル
 
 # 起動
 
@@ -13,7 +13,8 @@ docker compose up
 # url
 ### rails
 
-minio にファイルを保存するサンプルアプリケーション
+Scaffoldで生成したサンプルアプリケーションのurl
+articlesに添付するファイルはminioに保存される
 
 http://localhost:3000/articles
 
@@ -25,7 +26,8 @@ http://localhost:9001/login
 
 # 環境の削除
 
-CAUTION: minio, DBのデータやコンテナも削除されるため注意
+コンテナ・ボリュームを削除する
+注意: minioのデータ、コンテナ、DBのデータも削除される
 
 ```shell
 bin/remove.sh
